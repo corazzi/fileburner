@@ -1,25 +1,40 @@
-## Laravel PHP Framework
+# FileBurner
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+FileBurner is a tool that allows you to share files once, and only once.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
+## Usage
+###Database
+You will need a database table with the following columns:
 
-Laravel aims to make the development process a pleasing one for the developer without sacrificing application functionality. Happy developers make the best code. To this end, we've attempted to combine the very best of what we have seen in other web frameworks, including frameworks implemented in other languages, such as Ruby on Rails, ASP.NET MVC, and Sinatra.
+`id`
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+`secret`
 
-## Official Documentation
+`filename`
 
-Documentation for the entire framework can be found on the [Laravel website](http://laravel.com/docs).
+`owner_ip`
 
-### Contributing To Laravel
+`permitted_ip`
 
-**All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
+`filesize`
 
-### License
+`created_at`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+`updated_at`
+
+`deleted_at`
+
+By default, the table name is `files`, but you can use any table name by adding the following property to `app/models/Files.php`:
+
+` protected $table = 'my_table';`
+
+Set your database configuration up in `app/config/database.php`.
+
+###Upload Limit
+You can set your own custom uploads limit (the default is 2GB). I recommend you also set up an upload limit on the server where you host the tool.
+
+You will need to change values in:
+
+`app/controllers/FileController.php`
+
+`public/assets/js/app.js`
