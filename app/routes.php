@@ -18,6 +18,7 @@ Route::get('/files/send/{fileId}', 'FileController@send');
 Route::get('/files/dl/{fileId}', 'FileController@download');
 Route::get('/files/process/{fileId}', 'FileController@process');
 Route::post('/files/getTotalBurned', 'FileController@getTotalBurned');
+Route::any('/files/deleteoldfiles', 'FileController@deleteOldFiles');
 
 Route::any('files', function()
 {

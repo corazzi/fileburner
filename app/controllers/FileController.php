@@ -122,4 +122,41 @@ class FileController extends BaseController {
 	{
 		return Files::onlyTrashed()->count();
 	}
+
+	/**
+	 * deleteOldFiles
+	 * Deletes any files older than x amount of days
+	 * 
+	 * @param $days Number of days, defaults to 3
+	 * @return null
+	 */
+	public function deleteOldFiles($days = 3)
+	{
+		$dir = base_path()."/files";
+	
+		foreach(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS) as $folder)
+		{
+			// If older than the set amount of days...
+			if( is_dir($folder) && time() - filemtime($folder.'.') >= 60*60*24*$days)
+			{
+				foreach(new RecursiveDirectoryIterator($folder, RecursiveDirectoryIterator::SKIP_DOTS) as $subfolder)
+				{
+					if( is_dir($subfolder) )
+					{
+						foreach(new RecursiveDirectoryIterator($subfolder, RecursiveDirectoryIterator::SKIP_DOTS) as $file)
+						{
+							// Delete the file
+							unlink($file);
+							// Delete the subfolder (secret key folder)
+							rmdir($subfolder);
+							// Soft delete the file in the database
+							Files::destroy($folder->getBasename());
+						}
+					}
+				}
+				// Finally, remove the main folder (id folder)
+				rmdir($folder);
+			}
+		}
+	}
 }
